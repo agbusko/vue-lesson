@@ -12,30 +12,38 @@
 <body>
 		<div class="wrapper">
 			<div class="sample">
-				<form>
+				<form @submit.prevent="formSubmited = true" v-if="!formSubmited">
 					<div class="progress">
-						<div class="progress-bar"></div>
+						<div class="progress-bar" role="progressbar" :style="progressWidth"></div>
 					</div>
 					<div>
-						<div class="form-group">
-							<label>{{info[0].name}}</label>
-							<input type="text" class="form-control">
+						<div v-for="(item, index) in info" class="form-group">
+							<label>{{item.name}}</label>
+							<span class="fa"
+							      v-if="controls[index].activated"
+							      :class="controls[index].error ?
+										'fa-exclamation-circle text-danger' :  'fa-check-circle text-success'">
+							</span>
+							<input type="text"
+							       class="form-control"
+							       class="form-control"
+							       :value="item.value"
+							       @input="onInput(index, $event.target.value)">
 						</div>
 					</div>
-					<button class="btn btn-primary">
+					<button class="btn btn-primary" :disabled="done < info.length">
 						Send Data
 					</button>
 				</form>
 				<div>
 					<table class="table table-bordered">
-						<tr>
-							<td></td>
-							<td></td>
+						<tr v-for="item in info">
+							<td>{{item.name}}</td>
+							<td>{{item.value}}</td>
 						</tr>
 					</table>
 				</div>
 			</div>
 		</div>
-		<i class="fas fa-thumbs-up fa-5x"></i>
 </body>
 </html>
